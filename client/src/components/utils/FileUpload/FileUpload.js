@@ -3,7 +3,7 @@ import Dropzone from "react-dropzone";
 import { Icon } from "antd";
 import axios from "axios";
 
-function FileUpload() {
+function FileUpload(props) {
 	const [Images, setImages] = useState([]);
 
 	const dropHandler = (files) => {
@@ -15,13 +15,23 @@ function FileUpload() {
 
 		axios.post("/api/product/image", formData, config).then((response) => {
 			if (response.data.success) {
-				console.log(response.data);
-
 				setImages([...Images, response.data.filePath]);
+				props.refreshFunction([...Images, response.data.filePath]);
 			} else {
 				alert("파일 저장하는데 실패했습니다.");
 			}
 		});
+	};
+
+	const deleteHandler = (image) => {
+		// 여기서 image는 이미지 파일의 경로 데이터
+		const currentIndex = Images.indexOf(image);
+
+		let newImages = [...Images];
+		newImages.splice(currentIndex, 1); //배열에서 인덱스를 통해 원하는 요소에 접근해 삭제를 하는 메소드
+
+		setImages(newImages);
+		props.refreshFunction(newImages);
 	};
 
 	return (
@@ -56,7 +66,7 @@ function FileUpload() {
 				}}
 			>
 				{Images.map((image, index) => (
-					<div key={index}>
+					<div onClick={() => deleteHandler(image)} key={index}>
 						<img
 							style={{ minWidth: "250px", width: "250px", height: "200px" }}
 							src={`http://localhost:5000/${image}`}
