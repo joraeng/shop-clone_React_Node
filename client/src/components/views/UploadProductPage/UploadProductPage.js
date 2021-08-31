@@ -42,7 +42,7 @@ function UploadProductPage(props) {
 		event.preventDefault(); //이 조건이 있으면 submit이벤트가 발생할 때 자동으로 새로고침 하는걸 막아줌
 
 		// 모든 input에 값이 입력되지 않은 경우 다음 단계로 넘어가지 못하도록 한다
-		if (!Title || !Description || !Price || !Contient || !Images) {
+		if (!Title || !Description || !Price || !Continent || !Images) {
 			return alert("모든 값을 입력해주셔야 합니다");
 		}
 
@@ -58,9 +58,10 @@ function UploadProductPage(props) {
 		};
 		Axios.post("/api/product", body).then((response) => {
 			if (response.data.success) {
-				alert("상품 업로드에 성공 했습니다");
+				alert("상품 업로드에 성공 했습니다.");
+				props.history.push("/");
 			} else {
-				alert("상품 업로드에 실패 했습니다");
+				alert("상품 업로드에 실패 했습니다.");
 			}
 		});
 	};
@@ -99,7 +100,7 @@ function UploadProductPage(props) {
 				</select>
 				<br />
 				<br />
-				<Button>확인</Button>
+				<Button htmlType="submit">확인</Button>
 			</Form>
 		</div>
 	);
